@@ -2,101 +2,97 @@ import { useState, useEffect } from 'react';
 import type { Book, BorrowRequest } from '../types';
 
 export default function AdminPanel() {
-  const [books] = useState<Book[]>([]);
-  const [reqs, setReqs] = useState<BorrowRequest[]>([]);
-
-  const refresh = async () => {
-  const token = localStorage.getItem('token');
+  const [books, setBooks] = useState<Book[]>([]);
+  const [, setReqs] = useState<BorrowRequest[]>([]);
   
-  const rRes = await fetch('/api/borrow', { 
-    headers: { 'Authorization': `Bearer ${token}` } 
+  const [newBook, setNewBook] = useState({
+    title: '',
+    author: '',
+    quantity: 0,
+    location: ''
   });
 
-  if (rRes.ok && rRes.status !== 204) {
+  const refresh = async () => {
+    const token = localStorage.getItem('token');
+    const bRes = await fetch('/api/books', { headers: { 'Authorization': `Bearer ${token}` } });
+    const bData: unknown = await bRes.json();
+    setBooks(bData as Book[]);
+
+    const rRes = await fetch('/api/borrow', { headers: { 'Authorization': `Bearer ${token}` } });
     const rData: unknown = await rRes.json();
     setReqs(rData as BorrowRequest[]);
-  } else {
-    setReqs([]); 
-  }
-};
+  };
 
-  useEffect(() => { 
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    refresh(); 
-  }, []);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { refresh(); }, []);
+
+  const handleAddBook = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const res = await fetch('/api/books', {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}` 
+      },
+      body: JSON.stringify(newBook),
+    });
+
+    if (res.ok) {
+      alert('Book added successfully!');
+      setNewBook({ title: '', author: '', quantity: 0, location: '' }); 
+      refresh(); 
+    } else {
+      alert('Failed to add book');
+    }
+  };
 
   const deleteBook = async (id: string) => {
-    const confirmDelete = confirm("Are you sure you want to soft-delete this book?");
-    if (!confirmDelete) return;
-
-    await fetch(`/api/books/${id}`, { 
-      method: 'DELETE', 
-      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } 
-    });
+    await fetch(`/api/books/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } });
     refresh();
   };
 
   return (
-    <div className="admin-panel p-6 space-y-8">
-      <h2 className="text-3xl font-extrabold text-gray-900 border-b pb-2">Admin Dashboard</h2>
+    <div className="p-4">
+      <h2>Admin Dashboard</h2>
 
-      <section className="bg-white p-4 rounded-lg shadow">
-        <h3 className="text-xl font-bold mb-4 text-indigo-700">📚 Books Inventory</h3>
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Title</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Author</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {books.map(b => (
-                <tr key={b._id}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{b.title}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{b.author}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                      b.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                    }`}>
-                      {b.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    {b.status !== 'deleted' && (
-                      <button 
-                        onClick={() => deleteBook(b._id)}
-                        className="text-red-600 hover:text-red-900 font-bold"
-                      >
-                        Soft Delete
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+      <section className="mb-8 p-4 border rounded bg-gray-50">
+        <h3 className="font-bold mb-4 text-blue-700">Add New Book</h3>
+        <form onSubmit={handleAddBook} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input 
+            type="text" placeholder="Book Title" required className="border p-2 rounded"
+            value={newBook.title} onChange={e => setNewBook({...newBook, title: e.target.value})}
+          />
+          <input 
+            type="text" placeholder="Author" required className="border p-2 rounded"
+            value={newBook.author} onChange={e => setNewBook({...newBook, author: e.target.value})}
+          />
+          <input 
+            type="number" placeholder="Quantity" required className="border p-2 rounded"
+            value={newBook.quantity} onChange={e => setNewBook({...newBook, quantity: parseInt(e.target.value) || 0})}
+          />
+          <input 
+            type="text" placeholder="Location (e.g., A1)" required className="border p-2 rounded"
+            value={newBook.location} onChange={e => setNewBook({...newBook, location: e.target.value})}
+          />
+          <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 md:col-span-2">
+            Create Book
+          </button>
+        </form>
       </section>
 
-      <section className="bg-white p-4 rounded-lg shadow">
-        <h3 className="text-xl font-bold mb-4 text-green-700">📋 Borrowing Requests</h3>
-        <div className="grid grid-cols-1 gap-4">
-          {reqs.length === 0 ? (
-            <p className="text-gray-500 italic">No borrow requests found.</p>
-          ) : (
-            reqs.map(r => (
-              <div key={r._id} className="border-l-4 border-green-500 p-4 bg-green-50 rounded">
-                <p><strong>User ID:</strong> {r.userId}</p>
-                <p><strong>Target Date:</strong> {new Date(r.targetDate).toLocaleDateString()}</p>
-                <p><strong>Status:</strong> <span className="font-mono">{r.status}</span></p>
-              </div>
-            ))
-          )}
-        </div>
-      </section>
+      <h3 className="font-bold mb-2">Books Inventory</h3>
+      <div className="space-y-2">
+        {books.map(b => (
+          <div key={b._id} className="flex justify-between p-2 border-b">
+            <span style={{ color: b.status === 'deleted' ? 'red' : 'black' }}>
+              {b.title} ({b.author}) - {b.status}
+            </span>
+            {b.status !== 'deleted' && (
+              <button onClick={() => deleteBook(b._id)} className="text-red-500 underline text-sm">Delete</button>
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

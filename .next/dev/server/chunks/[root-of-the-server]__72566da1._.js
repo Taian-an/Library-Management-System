@@ -46,6 +46,51 @@ async function dbConnect() {
 }
 const __TURBOPACK__default__export__ = dbConnect;
 }),
+"[project]/Documents/CSX4107_FriMorning/LMS/models/Borrow.ts [api] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "default",
+    ()=>__TURBOPACK__default__export__
+]);
+var __TURBOPACK__imported__module__$5b$externals$5d2f$mongoose__$5b$external$5d$__$28$mongoose$2c$__cjs$2c$__$5b$project$5d2f$Documents$2f$CSX4107_FriMorning$2f$LMS$2f$node_modules$2f$mongoose$29$__ = __turbopack_context__.i("[externals]/mongoose [external] (mongoose, cjs, [project]/Documents/CSX4107_FriMorning/LMS/node_modules/mongoose)");
+;
+const BorrowSchema = new __TURBOPACK__imported__module__$5b$externals$5d2f$mongoose__$5b$external$5d$__$28$mongoose$2c$__cjs$2c$__$5b$project$5d2f$Documents$2f$CSX4107_FriMorning$2f$LMS$2f$node_modules$2f$mongoose$29$__["Schema"]({
+    userId: {
+        type: String,
+        required: true
+    },
+    bookId: {
+        type: __TURBOPACK__imported__module__$5b$externals$5d2f$mongoose__$5b$external$5d$__$28$mongoose$2c$__cjs$2c$__$5b$project$5d2f$Documents$2f$CSX4107_FriMorning$2f$LMS$2f$node_modules$2f$mongoose$29$__["default"].Schema.Types.ObjectId,
+        ref: 'Book',
+        required: true
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
+    targetDate: {
+        type: Date,
+        required: true
+    },
+    status: {
+        type: String,
+        required: true,
+        enum: [
+            'INIT',
+            'CLOSE-NO-AVAILABLE-BOOK',
+            'ACCEPTED',
+            'CANCEL-ADMIN',
+            'CANCEL-USER'
+        ],
+        default: 'INIT'
+    }
+}, {
+    timestamps: true
+});
+const BorrowModel = __TURBOPACK__imported__module__$5b$externals$5d2f$mongoose__$5b$external$5d$__$28$mongoose$2c$__cjs$2c$__$5b$project$5d2f$Documents$2f$CSX4107_FriMorning$2f$LMS$2f$node_modules$2f$mongoose$29$__["models"].Borrow || (0, __TURBOPACK__imported__module__$5b$externals$5d2f$mongoose__$5b$external$5d$__$28$mongoose$2c$__cjs$2c$__$5b$project$5d2f$Documents$2f$CSX4107_FriMorning$2f$LMS$2f$node_modules$2f$mongoose$29$__["model"])('Borrow', BorrowSchema);
+const __TURBOPACK__default__export__ = BorrowModel;
+}),
 "[project]/Documents/CSX4107_FriMorning/LMS/models/Book.ts [api] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
@@ -110,7 +155,7 @@ function verifyToken(req) {
     }
 }
 }),
-"[project]/Documents/CSX4107_FriMorning/LMS/pages/api/books/index.ts [api] (ecmascript)", ((__turbopack_context__) => {
+"[project]/Documents/CSX4107_FriMorning/LMS/pages/api/borrow.ts [api] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
 __turbopack_context__.s([
@@ -118,8 +163,10 @@ __turbopack_context__.s([
     ()=>handler
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$CSX4107_FriMorning$2f$LMS$2f$lib$2f$dbConnect$2e$js__$5b$api$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Documents/CSX4107_FriMorning/LMS/lib/dbConnect.js [api] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$CSX4107_FriMorning$2f$LMS$2f$models$2f$Borrow$2e$ts__$5b$api$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Documents/CSX4107_FriMorning/LMS/models/Borrow.ts [api] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$CSX4107_FriMorning$2f$LMS$2f$models$2f$Book$2e$ts__$5b$api$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Documents/CSX4107_FriMorning/LMS/models/Book.ts [api] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$CSX4107_FriMorning$2f$LMS$2f$lib$2f$auth$2e$ts__$5b$api$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Documents/CSX4107_FriMorning/LMS/lib/auth.ts [api] (ecmascript)");
+;
 ;
 ;
 ;
@@ -133,50 +180,72 @@ async function handler(req, res) {
             message: 'Unauthorized'
         });
     }
-    if (r.method === 'GET') {
-        const filter = {};
-        if (user.role !== 'ADMIN') {
-            filter.status = 'active';
-        }
-        if (r.query.title) {
-            filter.title = {
-                $regex: String(r.query.title),
-                $options: 'i'
-            };
-        }
-        if (r.query.author) {
-            filter.author = {
-                $regex: String(r.query.author),
-                $options: 'i'
-            };
-        }
-        const books = await __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$CSX4107_FriMorning$2f$LMS$2f$models$2f$Book$2e$ts__$5b$api$5d$__$28$ecmascript$29$__["default"].find(filter);
-        return s.status(200).json(books);
-    }
     if (r.method === 'POST') {
-        if (user.role !== 'ADMIN') {
+        if (user.role !== 'USER') {
             return s.status(403).json({
-                message: 'Forbidden: Admin only'
+                message: 'Forbidden'
             });
         }
+        const { bookId, targetDate } = r.body;
         try {
-            const bookData = r.body;
-            const newBook = await __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$CSX4107_FriMorning$2f$LMS$2f$models$2f$Book$2e$ts__$5b$api$5d$__$28$ecmascript$29$__["default"].create({
-                ...bookData,
-                status: 'active'
+            const book = await __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$CSX4107_FriMorning$2f$LMS$2f$models$2f$Book$2e$ts__$5b$api$5d$__$28$ecmascript$29$__["default"].findById(bookId);
+            if (!book || book.quantity <= 0 || book.status === 'deleted') {
+                return s.status(400).json({
+                    message: 'Book out of stock or unavailable'
+                });
+            }
+            await __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$CSX4107_FriMorning$2f$LMS$2f$models$2f$Book$2e$ts__$5b$api$5d$__$28$ecmascript$29$__["default"].findByIdAndUpdate(bookId, {
+                $inc: {
+                    quantity: -1
+                }
             });
-            return s.status(201).json(newBook);
+            const payload = {
+                userId: user.id,
+                bookId: bookId,
+                targetDate: new Date(targetDate),
+                status: 'INIT',
+                createdAt: new Date()
+            };
+            const request = await __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$CSX4107_FriMorning$2f$LMS$2f$models$2f$Borrow$2e$ts__$5b$api$5d$__$28$ecmascript$29$__["default"].create(payload);
+            return s.status(201).json(request);
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             return s.status(400).json({
-                message: 'Failed to create book'
+                message: 'Invalid data'
             });
         }
     }
-    // 處理不支援的 HTTP 方法
-    return s.status(405).end();
+    if (r.method === 'PATCH') {
+        if (user.role !== 'ADMIN') {
+            return s.status(403).json({
+                message: 'Forbidden'
+            });
+        }
+        const { requestId, status } = r.body;
+        const updated = await __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$CSX4107_FriMorning$2f$LMS$2f$models$2f$Borrow$2e$ts__$5b$api$5d$__$28$ecmascript$29$__["default"].findByIdAndUpdate(requestId, {
+            status: status
+        }, {
+            new: true
+        });
+        if (!updated) {
+            return s.status(404).json({
+                message: 'Request not found'
+            });
+        }
+        return s.status(200).json(updated);
+    }
+    if (r.method === 'GET') {
+        const filter = user.role === 'ADMIN' ? {} : {
+            userId: user.id
+        };
+        const requests = await __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$CSX4107_FriMorning$2f$LMS$2f$models$2f$Borrow$2e$ts__$5b$api$5d$__$28$ecmascript$29$__["default"].find(filter).sort({
+            createdAt: -1
+        });
+        return s.status(200).json(requests);
+    }
+    s.status(405).end();
 }
 }),
 ];
 
-//# sourceMappingURL=%5Broot-of-the-server%5D__0d5c7321._.js.map
+//# sourceMappingURL=%5Broot-of-the-server%5D__72566da1._.js.map
