@@ -19,24 +19,35 @@ export default async function handler(req: unknown, res: unknown): Promise<void>
 
   await dbConnect();
   const user = verifyToken(req);
-  if (!user) return s.status(401).json({ message: 'Unauthorized' });
+
+  if (!user) {
+    return s.status(401).json({ message: 'Unauthorized' });
+  }
 
   if (r.method === 'POST') {
-    if (user.role !== 'USER') return s.status(403).json({ message: 'Forbidden' });
+    if (user.role !== 'USER') {
+      return s.status(403).json({ message: 'Forbidden' });
+    }
     
-    const payload = { 
-      ...r.body, 
-      userId: user.id, 
-      status: 'INIT', 
-      createdAt: new Date() 
-    };
-    const request = await BorrowModel.create(payload);
-    s.status(201).json(request);
-    return;
+    try {
+      const payload = { 
+        ...r.body, 
+        userId: user.id, 
+        status: 'INIT', 
+        createdAt: new Date() 
+      };
+      const request = await BorrowModel.create(payload);
+      return s.status(201).json(request);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      return s.status(400).json({ message: 'Invalid data' });
+    }
   }
 
   if (r.method === 'PATCH') {
-    if (user.role !== 'ADMIN') return s.status(403).json({ message: 'Forbidden' });
+    if (user.role !== 'ADMIN') {
+      return s.status(403).json({ message: 'Forbidden' });
+    }
     
     const body = r.body as Record<string, string>;
     const updated = await BorrowModel.findByIdAndUpdate(
@@ -44,7 +55,8 @@ export default async function handler(req: unknown, res: unknown): Promise<void>
       { status: body.status }, 
       { new: true }
     );
-    s.status(200).json(updated);
-    return;
+    return s.status(200).json(updated);
   }
+
+  s.status(405).end();
 }

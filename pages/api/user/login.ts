@@ -1,4 +1,3 @@
-// @ts-ignore: 忽略找不到型別定義的紅線，改用下方斷言處理
 import jwt from 'jsonwebtoken';
 
 interface CustomApiRequest {

@@ -1,10 +1,18 @@
-import mongoose, { Schema, model, models } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 
-const BookSchema = new Schema({
-  title: { type: String, required: true }, 
-  author: { type: String, required: true }, 
-  quantity: { type: Number, required: true }, 
-  location: { type: String, required: true }, 
+interface IBook {
+  title: string;
+  author: string;
+  quantity: number;
+  location: string;
+  status: 'active' | 'deleted';
+}
+
+const BookSchema = new mongoose.Schema<IBook>({
+  title: { type: String, required: true },
+  author: { type: String, required: true },
+  quantity: { type: Number, required: true },
+  location: { type: String, required: true },
   status: { 
     type: String, 
     required: true, 
@@ -13,6 +21,6 @@ const BookSchema = new Schema({
   },
 }, { timestamps: true });
 
+const BookModel = (mongoose.models.Book as Model<IBook>) || mongoose.model<IBook>('Book', BookSchema);
 
-export default models.Book || model('Book', BookSchema);
-
+export default BookModel;
