@@ -2,24 +2,23 @@ import { useState, useEffect } from 'react';
 import type { Book, BorrowRequest } from '../types';
 
 export default function AdminPanel() {
-  const [books, setBooks] = useState<Book[]>([]);
+  const [books] = useState<Book[]>([]);
   const [reqs, setReqs] = useState<BorrowRequest[]>([]);
 
   const refresh = async () => {
-    const token = localStorage.getItem('token');
-    
-    const bRes = await fetch('/api/books', { 
-      headers: { 'Authorization': `Bearer ${token}` } 
-    });
-    const bData: unknown = await bRes.json();
-    setBooks(bData as Book[]);
+  const token = localStorage.getItem('token');
+  
+  const rRes = await fetch('/api/borrow', { 
+    headers: { 'Authorization': `Bearer ${token}` } 
+  });
 
-    const rRes = await fetch('/api/borrow', { 
-      headers: { 'Authorization': `Bearer ${token}` } 
-    });
+  if (rRes.ok && rRes.status !== 204) {
     const rData: unknown = await rRes.json();
     setReqs(rData as BorrowRequest[]);
-  };
+  } else {
+    setReqs([]); 
+  }
+};
 
   useEffect(() => { 
     // eslint-disable-next-line react-hooks/set-state-in-effect

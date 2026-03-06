@@ -476,24 +476,21 @@ var _s = __turbopack_context__.k.signature();
 ;
 function AdminPanel() {
     _s();
-    const [books, setBooks] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$CSX4107_FriMorning$2f$LMS$2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])([]);
+    const [books] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$CSX4107_FriMorning$2f$LMS$2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])([]);
     const [reqs, setReqs] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$CSX4107_FriMorning$2f$LMS$2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])([]);
     const refresh = async ()=>{
         const token = localStorage.getItem('token');
-        const bRes = await fetch('/api/books', {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-        const bData = await bRes.json();
-        setBooks(bData);
         const rRes = await fetch('/api/borrow', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         });
-        const rData = await rRes.json();
-        setReqs(rData);
+        if (rRes.ok && rRes.status !== 204) {
+            const rData = await rRes.json();
+            setReqs(rData);
+        } else {
+            setReqs([]);
+        }
     };
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$CSX4107_FriMorning$2f$LMS$2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "AdminPanel.useEffect": ()=>{
@@ -520,7 +517,7 @@ function AdminPanel() {
                 children: "Admin Dashboard"
             }, void 0, false, {
                 fileName: "[project]/Documents/CSX4107_FriMorning/LMS/src/components/AdminPanel.tsx",
-                lineNumber: 42,
+                lineNumber: 41,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$CSX4107_FriMorning$2f$LMS$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -531,7 +528,7 @@ function AdminPanel() {
                         children: "📚 Books Inventory"
                     }, void 0, false, {
                         fileName: "[project]/Documents/CSX4107_FriMorning/LMS/src/components/AdminPanel.tsx",
-                        lineNumber: 45,
+                        lineNumber: 44,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$CSX4107_FriMorning$2f$LMS$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -548,7 +545,7 @@ function AdminPanel() {
                                                 children: "Title"
                                             }, void 0, false, {
                                                 fileName: "[project]/Documents/CSX4107_FriMorning/LMS/src/components/AdminPanel.tsx",
-                                                lineNumber: 50,
+                                                lineNumber: 49,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$CSX4107_FriMorning$2f$LMS$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -556,7 +553,7 @@ function AdminPanel() {
                                                 children: "Author"
                                             }, void 0, false, {
                                                 fileName: "[project]/Documents/CSX4107_FriMorning/LMS/src/components/AdminPanel.tsx",
-                                                lineNumber: 51,
+                                                lineNumber: 50,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$CSX4107_FriMorning$2f$LMS$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -564,7 +561,7 @@ function AdminPanel() {
                                                 children: "Status"
                                             }, void 0, false, {
                                                 fileName: "[project]/Documents/CSX4107_FriMorning/LMS/src/components/AdminPanel.tsx",
-                                                lineNumber: 52,
+                                                lineNumber: 51,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$CSX4107_FriMorning$2f$LMS$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -572,18 +569,18 @@ function AdminPanel() {
                                                 children: "Actions"
                                             }, void 0, false, {
                                                 fileName: "[project]/Documents/CSX4107_FriMorning/LMS/src/components/AdminPanel.tsx",
-                                                lineNumber: 53,
+                                                lineNumber: 52,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/Documents/CSX4107_FriMorning/LMS/src/components/AdminPanel.tsx",
-                                        lineNumber: 49,
+                                        lineNumber: 48,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/Documents/CSX4107_FriMorning/LMS/src/components/AdminPanel.tsx",
-                                    lineNumber: 48,
+                                    lineNumber: 47,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$CSX4107_FriMorning$2f$LMS$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
@@ -595,7 +592,7 @@ function AdminPanel() {
                                                     children: b.title
                                                 }, void 0, false, {
                                                     fileName: "[project]/Documents/CSX4107_FriMorning/LMS/src/components/AdminPanel.tsx",
-                                                    lineNumber: 59,
+                                                    lineNumber: 58,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$CSX4107_FriMorning$2f$LMS$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -603,7 +600,7 @@ function AdminPanel() {
                                                     children: b.author
                                                 }, void 0, false, {
                                                     fileName: "[project]/Documents/CSX4107_FriMorning/LMS/src/components/AdminPanel.tsx",
-                                                    lineNumber: 60,
+                                                    lineNumber: 59,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$CSX4107_FriMorning$2f$LMS$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -613,12 +610,12 @@ function AdminPanel() {
                                                         children: b.status
                                                     }, void 0, false, {
                                                         fileName: "[project]/Documents/CSX4107_FriMorning/LMS/src/components/AdminPanel.tsx",
-                                                        lineNumber: 62,
+                                                        lineNumber: 61,
                                                         columnNumber: 21
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/Documents/CSX4107_FriMorning/LMS/src/components/AdminPanel.tsx",
-                                                    lineNumber: 61,
+                                                    lineNumber: 60,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$CSX4107_FriMorning$2f$LMS$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -629,40 +626,40 @@ function AdminPanel() {
                                                         children: "Soft Delete"
                                                     }, void 0, false, {
                                                         fileName: "[project]/Documents/CSX4107_FriMorning/LMS/src/components/AdminPanel.tsx",
-                                                        lineNumber: 70,
+                                                        lineNumber: 69,
                                                         columnNumber: 23
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/Documents/CSX4107_FriMorning/LMS/src/components/AdminPanel.tsx",
-                                                    lineNumber: 68,
+                                                    lineNumber: 67,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, b._id, true, {
                                             fileName: "[project]/Documents/CSX4107_FriMorning/LMS/src/components/AdminPanel.tsx",
-                                            lineNumber: 58,
+                                            lineNumber: 57,
                                             columnNumber: 17
                                         }, this))
                                 }, void 0, false, {
                                     fileName: "[project]/Documents/CSX4107_FriMorning/LMS/src/components/AdminPanel.tsx",
-                                    lineNumber: 56,
+                                    lineNumber: 55,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/Documents/CSX4107_FriMorning/LMS/src/components/AdminPanel.tsx",
-                            lineNumber: 47,
+                            lineNumber: 46,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/Documents/CSX4107_FriMorning/LMS/src/components/AdminPanel.tsx",
-                        lineNumber: 46,
+                        lineNumber: 45,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/Documents/CSX4107_FriMorning/LMS/src/components/AdminPanel.tsx",
-                lineNumber: 44,
+                lineNumber: 43,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$CSX4107_FriMorning$2f$LMS$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -673,7 +670,7 @@ function AdminPanel() {
                         children: "📋 Borrowing Requests"
                     }, void 0, false, {
                         fileName: "[project]/Documents/CSX4107_FriMorning/LMS/src/components/AdminPanel.tsx",
-                        lineNumber: 86,
+                        lineNumber: 85,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$CSX4107_FriMorning$2f$LMS$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -683,7 +680,7 @@ function AdminPanel() {
                             children: "No borrow requests found."
                         }, void 0, false, {
                             fileName: "[project]/Documents/CSX4107_FriMorning/LMS/src/components/AdminPanel.tsx",
-                            lineNumber: 89,
+                            lineNumber: 88,
                             columnNumber: 13
                         }, this) : reqs.map((r)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$CSX4107_FriMorning$2f$LMS$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "border-l-4 border-green-500 p-4 bg-green-50 rounded",
@@ -694,11 +691,28 @@ function AdminPanel() {
                                                 children: "User ID:"
                                             }, void 0, false, {
                                                 fileName: "[project]/Documents/CSX4107_FriMorning/LMS/src/components/AdminPanel.tsx",
-                                                lineNumber: 93,
+                                                lineNumber: 92,
                                                 columnNumber: 20
                                             }, this),
                                             " ",
                                             r.userId
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/Documents/CSX4107_FriMorning/LMS/src/components/AdminPanel.tsx",
+                                        lineNumber: 92,
+                                        columnNumber: 17
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$CSX4107_FriMorning$2f$LMS$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$CSX4107_FriMorning$2f$LMS$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                                children: "Target Date:"
+                                            }, void 0, false, {
+                                                fileName: "[project]/Documents/CSX4107_FriMorning/LMS/src/components/AdminPanel.tsx",
+                                                lineNumber: 93,
+                                                columnNumber: 20
+                                            }, this),
+                                            " ",
+                                            new Date(r.targetDate).toLocaleDateString()
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/Documents/CSX4107_FriMorning/LMS/src/components/AdminPanel.tsx",
@@ -708,27 +722,10 @@ function AdminPanel() {
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$CSX4107_FriMorning$2f$LMS$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$CSX4107_FriMorning$2f$LMS$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
-                                                children: "Target Date:"
-                                            }, void 0, false, {
-                                                fileName: "[project]/Documents/CSX4107_FriMorning/LMS/src/components/AdminPanel.tsx",
-                                                lineNumber: 94,
-                                                columnNumber: 20
-                                            }, this),
-                                            " ",
-                                            new Date(r.targetDate).toLocaleDateString()
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/Documents/CSX4107_FriMorning/LMS/src/components/AdminPanel.tsx",
-                                        lineNumber: 94,
-                                        columnNumber: 17
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$CSX4107_FriMorning$2f$LMS$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                        children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$CSX4107_FriMorning$2f$LMS$2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
                                                 children: "Status:"
                                             }, void 0, false, {
                                                 fileName: "[project]/Documents/CSX4107_FriMorning/LMS/src/components/AdminPanel.tsx",
-                                                lineNumber: 95,
+                                                lineNumber: 94,
                                                 columnNumber: 20
                                             }, this),
                                             " ",
@@ -737,40 +734,40 @@ function AdminPanel() {
                                                 children: r.status
                                             }, void 0, false, {
                                                 fileName: "[project]/Documents/CSX4107_FriMorning/LMS/src/components/AdminPanel.tsx",
-                                                lineNumber: 95,
+                                                lineNumber: 94,
                                                 columnNumber: 45
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/Documents/CSX4107_FriMorning/LMS/src/components/AdminPanel.tsx",
-                                        lineNumber: 95,
+                                        lineNumber: 94,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, r._id, true, {
                                 fileName: "[project]/Documents/CSX4107_FriMorning/LMS/src/components/AdminPanel.tsx",
-                                lineNumber: 92,
+                                lineNumber: 91,
                                 columnNumber: 15
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/Documents/CSX4107_FriMorning/LMS/src/components/AdminPanel.tsx",
-                        lineNumber: 87,
+                        lineNumber: 86,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/Documents/CSX4107_FriMorning/LMS/src/components/AdminPanel.tsx",
-                lineNumber: 85,
+                lineNumber: 84,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/Documents/CSX4107_FriMorning/LMS/src/components/AdminPanel.tsx",
-        lineNumber: 41,
+        lineNumber: 40,
         columnNumber: 5
     }, this);
 }
-_s(AdminPanel, "MZfHyItb932XM7eAb2Knp2sqTEs=");
+_s(AdminPanel, "v9Pcgp8BvT89VpWK+GwWS82EimQ=");
 _c = AdminPanel;
 var _c;
 __turbopack_context__.k.register(_c, "AdminPanel");
