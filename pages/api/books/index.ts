@@ -19,8 +19,11 @@ export default async function handler(req: unknown, res: unknown): Promise<void>
   const s = res as CustomApiResponse;
 
   await dbConnect();
+
   const user = verifyToken(req);
-  if (!user) return s.status(401).json({ message: 'Unauthorized' }); 
+  if (!user) {
+    return s.status(401).json({ message: 'Unauthorized' });
+  }
 
   if (r.method === 'GET') {
     const filter: Record<string, unknown> = {};
@@ -29,19 +32,35 @@ export default async function handler(req: unknown, res: unknown): Promise<void>
       filter.status = 'active';
     }
 
-    if (r.query.title) filter.title = { $regex: String(r.query.title), $options: 'i' };
-    if (r.query.author) filter.author = { $regex: String(r.query.author), $options: 'i' };
+    if (r.query.title) {
+      filter.title = { $regex: String(r.query.title), $options: 'i' };
+    }
+    if (r.query.author) {
+      filter.author = { $regex: String(r.query.author), $options: 'i' };
+    }
 
     const books = await BookModel.find(filter);
-    s.status(200).json(books);
-    return;
+    return s.status(200).json(books);
   }
 
   if (r.method === 'POST') {
-    if (user.role !== 'ADMIN') return s.status(403).json({ message: 'Forbidden' }); 
+    if (user.role !== 'ADMIN') {
+      return s.status(403).json({ message: 'Forbidden: Admin only' });
+    }
     
-    const newBook = await BookModel.create(r.body);
-    s.status(201).json(newBook);
-    return;
+    try {
+      const bookData = r.body as Record<string, unknown>;
+      const newBook = await BookModel.create({
+        ...bookData,
+        status: 'active' 
+      });
+      return s.status(201).json(newBook);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      return s.status(400).json({ message: 'Failed to create book' });
+    }
   }
+
+  // 處理不支援的 HTTP 方法
+  return s.status(405).end();
 }
