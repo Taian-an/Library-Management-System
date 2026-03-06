@@ -1,0 +1,3 @@
+{
+  "/api/books/[id]": "pages/api/books/[id].js"
+}

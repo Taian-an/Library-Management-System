@@ -3,6 +3,7 @@
   "/_app": "pages/_app.js",
   "/_document": "pages/_document.js",
   "/api/books": "pages/api/books.js",
+  "/api/books/[id]": "pages/api/books/[id].js",
   "/api/borrow": "pages/api/borrow.js",
   "/api/user/login": "pages/api/user/login.js"
 }
