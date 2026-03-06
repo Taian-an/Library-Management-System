@@ -1,19 +1,8 @@
-import type Mongoose from 'mongoose';
+import mongoose, { Schema, model, models, Model } from 'mongoose';
 
-import mongoose from 'mongoose';
-const { Schema, model, models } = mongoose;
-
-interface IBorrow {
-  userId: string;
-  bookId: Mongoose.Types.ObjectId;
-  createdAt: Date;
-  targetDate: Date;
-  status: 'INIT' | 'CLOSE-NO-AVAILABLE-BOOK' | 'ACCEPTED' | 'CANCEL-ADMIN' | 'CANCEL-USER';
-}
-
-const BorrowSchema = new Schema<IBorrow>({
+const BorrowSchema = new Schema({
   userId: { type: String, required: true },
-  bookId: { type: Schema.Types.ObjectId, ref: 'Book', required: true },
+  bookId: { type: mongoose.Schema.Types.ObjectId, ref: 'Book', required: true },
   createdAt: { type: Date, default: Date.now },
   targetDate: { type: Date, required: true },
   status: { 
@@ -24,6 +13,6 @@ const BorrowSchema = new Schema<IBorrow>({
   }
 }, { timestamps: true });
 
-const BorrowModel = (models.Borrow as unknown as Mongoose.Model<IBorrow>) || model<IBorrow>('Borrow', BorrowSchema);
+const BorrowModel = (models.Borrow as unknown as Model<unknown>) || model('Borrow', BorrowSchema);
 
 export default BorrowModel;

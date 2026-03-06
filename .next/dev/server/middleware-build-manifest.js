@@ -1,0 +1,49 @@
+globalThis.__BUILD_MANIFEST = {
+  "pages": {
+    "/": [
+      "static/chunks/5cc3f_next_dist_compiled_1119ea93._.js",
+      "static/chunks/5cc3f_next_dist_shared_lib_6755ff03._.js",
+      "static/chunks/5cc3f_next_dist_client_a058a788._.js",
+      "static/chunks/5cc3f_next_dist_6a19eeea._.js",
+      "static/chunks/5cc3f_react-dom_aacc29ce._.js",
+      "static/chunks/5cc3f_67d3fab1._.js",
+      "static/chunks/[root-of-the-server]__69685902._.js",
+      "static/chunks/Documents_CSX4107_FriMorning_LMS_pages_index_2da965e7._.js",
+      "static/chunks/turbopack-Documents_CSX4107_FriMorning_LMS_pages_index_6d6d4a66._.js"
+    ],
+    "/_app": [
+      "static/chunks/5cc3f_next_dist_compiled_1119ea93._.js",
+      "static/chunks/5cc3f_next_dist_shared_lib_6755ff03._.js",
+      "static/chunks/5cc3f_next_dist_client_a058a788._.js",
+      "static/chunks/5cc3f_next_dist_50ffd06c._.js",
+      "static/chunks/5cc3f_next_app_190d0455.js",
+      "static/chunks/[next]_entry_page-loader_ts_d8dedb0c._.js",
+      "static/chunks/5cc3f_react-dom_aacc29ce._.js",
+      "static/chunks/5cc3f_67d3fab1._.js",
+      "static/chunks/[root-of-the-server]__00fd5728._.js",
+      "static/chunks/Documents_CSX4107_FriMorning_LMS_pages__app_2da965e7._.js",
+      "static/chunks/turbopack-Documents_CSX4107_FriMorning_LMS_pages__app_37d750bd._.js"
+    ],
+    "/_error": [
+      "static/chunks/5cc3f_next_dist_compiled_1119ea93._.js",
+      "static/chunks/5cc3f_next_dist_shared_lib_339bdce5._.js",
+      "static/chunks/5cc3f_next_dist_client_a058a788._.js",
+      "static/chunks/5cc3f_next_dist_e68be06b._.js",
+      "static/chunks/5cc3f_next_error_c60f7062.js",
+      "static/chunks/[next]_entry_page-loader_ts_acc8b34d._.js",
+      "static/chunks/5cc3f_react-dom_aacc29ce._.js",
+      "static/chunks/5cc3f_67d3fab1._.js",
+      "static/chunks/[root-of-the-server]__56976f95._.js",
+      "static/chunks/Documents_CSX4107_FriMorning_LMS_pages__error_2da965e7._.js",
+      "static/chunks/turbopack-Documents_CSX4107_FriMorning_LMS_pages__error_c000c6b4._.js"
+    ]
+  },
+  "devFiles": [],
+  "polyfillFiles": [],
+  "lowPriorityFiles": [],
+  "rootMainFiles": []
+};
+globalThis.__BUILD_MANIFEST.lowPriorityFiles = [
+"/static/" + process.env.__NEXT_BUILD_ID + "/_buildManifest.js",
+"/static/" + process.env.__NEXT_BUILD_ID + "/_ssgManifest.js"
+];
